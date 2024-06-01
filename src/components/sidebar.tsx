@@ -8,6 +8,7 @@ import SidebarTweetButton from "./sidebarTweetButton";
 import { useRecoilValue } from "recoil";
 import { userData } from "@/recoil/selector";
 import { LoginModal } from "./modals/loginModal";
+import { SignupModal } from "./modals/signupModal";
 
 const items = [
     { label: "Home", href: "/", icon: BsHouseFill },
@@ -39,6 +40,7 @@ const Sidebar = () => {
                         />
                     )}
                     {!user && <LoginModal />}
+                    {!user && <SignupModal />}
                     <SidebarTweetButton />
                 </div>
             </div>

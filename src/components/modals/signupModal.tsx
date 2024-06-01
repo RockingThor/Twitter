@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import SidebarItem from "../sidebaritem";
-import { BiLogIn } from "react-icons/bi";
+import { BiArrowFromLeft } from "react-icons/bi";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -30,23 +30,31 @@ import { toast } from "sonner";
 
 const formSchema = z.object({
     username: z.string().min(2).max(50),
+    email: z.string().email(),
     password: z.string().min(8).max(50),
+    name: z.string().min(4).max(50),
 });
 
-export function LoginModal() {
+export function SignupModal() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             username: "",
             password: "",
+            email: "",
+            name: "",
         },
     });
+
+    async function checkUsernameAvailability() {}
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             const response = await axios.post(`${BACKEND_URL}/signin`, {
-                email: values.username,
+                email: values.email,
                 password: values.password,
+                username: values.username,
+                name: values.name,
             });
         } catch (error) {
             toast(
@@ -59,18 +67,18 @@ export function LoginModal() {
             <DialogTrigger>
                 <SidebarItem
                     onClick={() => {}}
-                    icon={BiLogIn}
-                    label="Login"
+                    icon={BiArrowFromLeft}
+                    label="Signup"
                 />
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Login to twitter</DialogTitle>
+                    <DialogTitle>Signup to twitter</DialogTitle>
                     <DialogDescription>
                         <p className="flex flex-row">
-                            {" New to twitter? "}
+                            {"Already have an account? "}
                             <p className="pl-1 text-blue-200 underline">
-                                Signup here.
+                                Login here.
                             </p>
                         </p>
                     </DialogDescription>
@@ -82,10 +90,43 @@ export function LoginModal() {
                     >
                         <FormField
                             control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Name</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="Rohit N."
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="rohit@rohit.com"
+                                            {...field}
+                                            type="email"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
                             name="username"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Username/Email</FormLabel>
+                                    <FormLabel>Username</FormLabel>
                                     <FormControl>
                                         <Input
                                             placeholder="@...."
@@ -104,7 +145,7 @@ export function LoginModal() {
                                     <FormLabel>Password</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="Enter your password here..."
+                                            placeholder=""
                                             {...field}
                                             type="password"
                                         />
@@ -114,7 +155,7 @@ export function LoginModal() {
                             )}
                         />
                         <DialogFooter>
-                            <Button type="submit">Login</Button>
+                            <Button type="submit">Signup</Button>
                         </DialogFooter>
                     </form>
                 </Form>
