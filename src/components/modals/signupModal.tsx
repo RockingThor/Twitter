@@ -18,7 +18,6 @@ import { useForm } from "react-hook-form";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -27,6 +26,9 @@ import {
 import axios from "axios";
 import { BACKEND_URL } from "@/lib/config";
 import { toast } from "sonner";
+import { useEffect, useState } from "react";
+import { useDebouncedCheck } from "@/hooks/debouncedHook";
+import { Loader } from "../loader";
 
 const formSchema = z.object({
     username: z.string().min(2).max(50),
@@ -46,7 +48,20 @@ export function SignupModal() {
         },
     });
 
-    async function checkUsernameAvailability() {}
+    const [username, setUsername] = useState("");
+    const { isAvailable, isLoading, error } = useDebouncedCheck(username, 500);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        if (isAvailable) toast("Username is available");
+        else toast("Username not available \n Try another one");
+        if (error) toast(error);
+    }, [isAvailable, isLoading, error]);
+
+    useEffect(() => {
+        setUsername(form.watch("username"));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [form.watch("username")]);
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
@@ -131,6 +146,10 @@ export function SignupModal() {
                                         <Input
                                             placeholder="@...."
                                             {...field}
+                                            // onChange={(e) => {
+                                            //     setUsername(e.target.value);
+                                            // }}
+                                            type="text"
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -155,7 +174,10 @@ export function SignupModal() {
                             )}
                         />
                         <DialogFooter>
-                            <Button type="submit">Signup</Button>
+                            <Button type="submit">
+                                {isLoading && <Loader />}{" "}
+                                {!isLoading && !isSubmitting && "Sign Up"}
+                            </Button>
                         </DialogFooter>
                     </form>
                 </Form>

@@ -18,7 +18,6 @@ import { useForm } from "react-hook-form";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -27,6 +26,8 @@ import {
 import axios from "axios";
 import { BACKEND_URL } from "@/lib/config";
 import { toast } from "sonner";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
     username: z.string().min(2).max(50),
@@ -41,6 +42,7 @@ export function LoginModal() {
             password: "",
         },
     });
+    const router = useRouter();
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
@@ -48,8 +50,17 @@ export function LoginModal() {
                 email: values.username,
                 password: values.password,
             });
+            if (response.data) {
+                Cookies.set("token", response.data.token, {
+                    path: "/",
+                    secure: true,
+                    sameSite: "strict",
+                });
+            }
+            toast.success("Login success!! Redirecting you to the home.");
+            router.push("/home");
         } catch (error) {
-            toast(
+            toast.error(
                 "Login failed.😟 Please recheck provided credentials and try again."
             );
         }
