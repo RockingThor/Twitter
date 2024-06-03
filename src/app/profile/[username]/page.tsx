@@ -6,6 +6,7 @@ import { UserWithDetails } from "@/lib/types";
 import axios from "axios";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 const Profile = ({ params }: { params: { username: string } }) => {
     const [isFetched, setIsFetched] = useState(false);
@@ -19,7 +20,7 @@ const Profile = ({ params }: { params: { username: string } }) => {
             const fetchData = async () => {
                 const response = await axios.get(`${BACKEND_URL}/profile`, {
                     headers: {
-                        token: localStorage.getItem("token"),
+                        authorization: Cookies.get("token"),
                     },
                     params: {
                         username: params.username,
@@ -52,14 +53,24 @@ const Profile = ({ params }: { params: { username: string } }) => {
             <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg ">
                 <div className="relative">
                     <Image
-                        src={profile?.backgroundImageURL || ""}
+                        src={
+                            profile?.backgroundImageURL ||
+                            "https://d2lff49aaqvgse.cloudfront.net/twitter/static/1500x500.jpeg"
+                        }
+                        height={100}
+                        width={100}
                         alt="Profile banner"
                         className="w-full h-56 object-cover rounded-t-lg"
                     />
                     <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
                         <Image
-                            src={profile?.imageURL || ""}
+                            src={
+                                profile?.imageURL ||
+                                "https://d2lff49aaqvgse.cloudfront.net/twitter/static/354384-200.png"
+                            }
                             alt="Profile"
+                            height={100}
+                            width={100}
                             className="w-32 h-32 object-cover rounded-full border-4 border-white dark:border-gray-800"
                         />
                     </div>

@@ -5,10 +5,7 @@ export interface User {
 }
 
 export interface Tweet {
-    content: string;
-    author: string;
-    likes: number;
-    retweet: number;
+    id: number;
 }
 
 export interface UserWithDetails extends User {

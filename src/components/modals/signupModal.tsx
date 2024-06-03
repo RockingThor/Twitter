@@ -29,6 +29,8 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { useDebouncedCheck } from "@/hooks/debouncedHook";
 import { Loader } from "../loader";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const formSchema = z.object({
     username: z.string().min(2).max(50),
@@ -52,6 +54,8 @@ export function SignupModal() {
     const { isAvailable, isLoading, error } = useDebouncedCheck(username, 500);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const router = useRouter();
+
     useEffect(() => {
         if (isAvailable) toast("Username is available");
         else toast("Username not available \n Try another one");
@@ -64,16 +68,31 @@ export function SignupModal() {
     }, [form.watch("username")]);
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        if (!isAvailable) {
+            toast.error(
+                "Please select an unique username and then submit again.🥹"
+            );
+            return;
+        }
         try {
-            const response = await axios.post(`${BACKEND_URL}/signin`, {
+            const response = await axios.post(`${BACKEND_URL}/signup`, {
                 email: values.email,
                 password: values.password,
                 username: values.username,
                 name: values.name,
             });
+            if (response.data) {
+                Cookies.set("token", response.data.token, {
+                    path: "/",
+                    secure: true,
+                    sameSite: "strict",
+                });
+            }
+            toast.success("Signup success!! Redirecting you to the home.");
+            router.push("/home");
         } catch (error) {
             toast(
-                "Login failed.😟 Please recheck provided credentials and try again."
+                "Signup failed.😟 Please recheck provided credentials and try again."
             );
         }
     };
