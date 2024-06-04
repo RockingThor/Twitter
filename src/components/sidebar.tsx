@@ -13,15 +13,18 @@ import Cookies from "js-cookie"; // Cookies
 import axios from "axios";
 import { BACKEND_URL } from "@/lib/config";
 
-const items = [
-    { label: "Home", href: "/", icon: BsHouseFill },
-    { label: "Notifications", href: "/notifications", icon: BsBellFill },
-    { label: "Profile", href: "/user/123", icon: FaUser },
-];
-
 const Sidebar = () => {
     const [user, setUser] = useRecoilState(userState);
     const [isFetched, setIsFetched] = useState(false);
+    const items = [
+        { label: "Home", href: "/", icon: BsHouseFill },
+        { label: "Notifications", href: "/notifications", icon: BsBellFill },
+        {
+            label: "Profile",
+            href: `/profile/${user ? user.username : " "}`,
+            icon: FaUser,
+        },
+    ];
 
     useEffect(() => {
         if (isFetched) return;

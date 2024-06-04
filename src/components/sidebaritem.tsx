@@ -1,3 +1,5 @@
+"use client";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { IconType } from "react-icons";
 
@@ -14,8 +16,18 @@ const SidebarItem = ({
     label,
     onClick,
 }: SidebarItemProps) => {
+    const router = useRouter();
+    const handleClick = () => {
+        if (href) {
+            router.push(href);
+        }
+    };
+
     return (
-        <div className="flex flex-row items-center">
+        <div
+            className="flex flex-row items-center"
+            onClick={handleClick}
+        >
             <div className="realtive rounded-full h-14 w-14 flex item-center justify-center p-4 hover:bg-slate-300 hover:bg-opacity-10 cursor-pointer lg:hidden">
                 <Icon
                     size={28}

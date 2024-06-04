@@ -15,3 +15,13 @@ export interface UserWithDetails extends User {
     bio: string;
     tweets: Tweet[];
 }
+
+export interface TweetWithDetails extends Tweet {
+    content: string;
+    authorName: string;
+    authorUsername: string;
+    authorImage?: string;
+    likeCount: number;
+    isLiked?: boolean;
+    imageURL?: string[];
+}
