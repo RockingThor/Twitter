@@ -51,7 +51,7 @@ export function SignupModal() {
     });
 
     const [username, setUsername] = useState("");
-    const { isAvailable, isLoading, error } = useDebouncedCheck(username, 500);
+    const { isAvailable, isLoading, error } = useDebouncedCheck(username, 1500);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const router = useRouter();
@@ -60,7 +60,7 @@ export function SignupModal() {
         if (isAvailable) toast("Username is available");
         else toast("Username not available \n Try another one");
         if (error) toast(error);
-    }, [isAvailable, isLoading, error]);
+    }, [isAvailable, error]);
 
     useEffect(() => {
         setUsername(form.watch("username"));
@@ -89,7 +89,7 @@ export function SignupModal() {
                 });
             }
             toast.success("Signup success!! Redirecting you to the home.");
-            router.push("/home");
+            router.push("/");
         } catch (error) {
             toast(
                 "Signup failed.😟 Please recheck provided credentials and try again."

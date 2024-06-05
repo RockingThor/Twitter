@@ -16,7 +16,7 @@ interface TweetCardProps {
     authorUsername: string;
     authorImage?: string;
     imageURL?: string[];
-    isLiked: boolean;
+    isLiked?: boolean;
     likeCount: number;
 }
 

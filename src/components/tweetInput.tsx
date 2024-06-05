@@ -63,7 +63,7 @@ const TweetInput = () => {
         }
     };
     return (
-        <div className="max-w-xl mx-auto p-4 bg-gray-900 text-white rounded-lg">
+        <div className="max-w-xl mx-auto p-4 bg-gray-900 text-white ">
             <div className="flex items-center space-x-4">
                 <Avatar>
                     <AvatarImage

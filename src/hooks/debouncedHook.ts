@@ -19,13 +19,11 @@ export const useDebouncedCheck = (value: string, delay: number) => {
             setError("");
 
             try {
-                const response = await axios.get(
+                const response = await axios.post(
                     `${BACKEND_URL}/validate-username`,
                     {
                         cancelToken: source.token,
-                        params: {
-                            username: value,
-                        },
+                        username: value,
                     }
                 );
 
