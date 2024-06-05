@@ -7,14 +7,16 @@ import Cookies from "js-cookie";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useRecoilState } from "recoil";
-import { userState } from "@/recoil/atom";
+import { tweetState, userState } from "@/recoil/atom";
 import { Loader } from "./loader";
+import { TweetWithDetails } from "@/lib/types";
 
 const TweetInput = () => {
     const [isDisabled, setIsDisabled] = useState(true);
     const [content, setContent] = useState("");
     const [user, setUser] = useRecoilState(userState);
     const [isLoading, setIsLoading] = useState(false);
+    const [tweets, setTweets] = useRecoilState(tweetState);
 
     useEffect(() => {
         if (content.length > 0) {
@@ -40,20 +42,22 @@ const TweetInput = () => {
             );
             if (res.data) {
                 toast.success("Tweet done!!😁");
-                const tweet = {
-                    id: res.data.tweetId,
+                const temp: TweetWithDetails[] = [];
+                const newTweet = {
+                    id: Number(res.data.id),
+                    content: res.data.content,
+                    authorName: res.data.author.name,
+                    authorUsername: res.data.author.username,
+                    authorImage: res.data.author.profileImage,
+                    likeCount: 0,
+                    isLiked: false,
+                    imageURL: [],
                 };
-                if (user?.tweets) {
-                    let newUser = user;
-                    newUser.tweets.push(tweet);
-                    setUser(newUser);
-                } else {
-                    let newUser = user;
-                    if (newUser) {
-                        newUser = { ...newUser, tweets: [tweet] };
-                        setUser(newUser);
-                    }
-                }
+                temp.push(newTweet);
+                tweets?.map((tweet: TweetWithDetails) => {
+                    temp.push(tweet);
+                });
+                setTweets(temp);
             }
         } catch (error: any) {
             console.log(error.message);

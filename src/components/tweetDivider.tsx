@@ -1,7 +1,11 @@
 import React from "react";
 
-const TweetDivider = () => {
-    return <div className="border-b border-gray-700 my-4"></div>;
+interface TweetDividerProps {
+    className?: string;
+}
+
+const TweetDivider = ({ className }: TweetDividerProps) => {
+    return <div className={`border-b border-gray-700 ${className}`}></div>;
 };
 
 export default TweetDivider;

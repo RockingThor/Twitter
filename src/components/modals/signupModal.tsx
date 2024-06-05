@@ -40,6 +40,7 @@ const formSchema = z.object({
 });
 
 export function SignupModal() {
+    const [sendRequest, setSendRequest] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -57,12 +58,15 @@ export function SignupModal() {
     const router = useRouter();
 
     useEffect(() => {
-        if (isAvailable) toast("Username is available");
-        else toast("Username not available \n Try another one");
+        if (!sendRequest) return;
+        if (isAvailable) toast("Username is available.");
+        if (!isAvailable && isAvailable != null)
+            toast("Username not available. \n Try another one");
         if (error) toast(error);
-    }, [isAvailable, error]);
+    }, [isAvailable, error, sendRequest]);
 
     useEffect(() => {
+        if (form.watch("username").length > 1) setSendRequest(true);
         setUsername(form.watch("username"));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [form.watch("username")]);

@@ -25,3 +25,10 @@ export interface TweetWithDetails extends Tweet {
     isLiked?: boolean;
     imageURL?: string[];
 }
+
+export interface People {
+    id: number;
+    name: string;
+    profileImage?: string;
+    following: boolean;
+}

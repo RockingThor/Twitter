@@ -1,12 +1,11 @@
 "use client";
 import Header from "@/components/header";
-import TwitterCard from "@/components/tweetCard1";
 import { BACKEND_URL } from "@/lib/config";
-import { tweetCount, tweetState } from "@/recoil/atom";
+import { tweetCount, tweetState, userState } from "@/recoil/atom";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import Cookies from "js-cookie";
 import TweetInput from "@/components/tweetInput";
 import { TweetWithDetails } from "@/lib/types";
@@ -19,6 +18,7 @@ export default function Home() {
     const [tweets, setTweets] = useRecoilState(tweetState);
     const [isLoading, setIsLoading] = useState(false);
     const [isFetched, setIsFetched] = useState(false);
+    const user = useRecoilValue(userState);
 
     useEffect(() => {
         if (isFetched) return;
@@ -57,19 +57,27 @@ export default function Home() {
                 }
             };
             fetchData();
-            setIsLoading(false);
             setIsFetched(true);
         } catch (error) {
             console.log(error);
             setIsFetched(false);
         } finally {
-            console.log(tweets);
+            setIsLoading(false);
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    if (!user)
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <Loader />
+            </div>
+        );
     return (
         <>
             <Header label="Home" />
             <TweetInput />
+            <TweetDivider className="" />
             {isLoading && (
                 <div className="flex items-center justify-center h-screen">
                     <Loader />
@@ -77,9 +85,12 @@ export default function Home() {
             )}
             {!isLoading &&
                 tweets &&
-                tweets.map((tweet) => (
-                    <div key={tweet.id}>
-                        <TweetDivider />
+                tweets.map((tweet, i) => (
+                    <div
+                        key={tweet.id}
+                        className="mt-2"
+                    >
+                        {i != 0 && <TweetDivider className="mr-2 ml-2" />}
                         <TweetCard
                             tweetId={tweet.id}
                             authorName={tweet.authorName}

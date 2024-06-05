@@ -50,27 +50,29 @@ const TweetCard = ({
         }
     };
     return (
-        <div className="flex space-x-4">
-            <Avatar>
-                <AvatarImage
-                    src={`${
-                        authorImage
-                            ? authorImage
-                            : "https://github.com/shadcn.png"
-                    }`}
-                    alt={authorName}
-                />
-                <AvatarFallback>{authorUsername}</AvatarFallback>
-            </Avatar>
+        <div className="flex space-x-4 p-2">
+            <div className="p-2">
+                <Avatar>
+                    <AvatarImage
+                        src={`${
+                            authorImage
+                                ? authorImage
+                                : "https://github.com/shadcn.png"
+                        }`}
+                        alt={authorName}
+                    />
+                    <AvatarFallback>{authorUsername}</AvatarFallback>
+                </Avatar>
+            </div>
 
-            <div className="flex-1">
+            <div className="flex-1 pt-2">
                 <div className="flex items-center space-x-2">
                     <span className="font-bold">{authorName}</span>
                     <span className="text-gray-500">{`@${authorUsername}`}</span>
                     <span className="text-gray-500">· 1h</span>
                 </div>
                 <p className="mt-1">
-                    {content} <span className="text-yellow-400">⭐</span>
+                    {content} <span className="text-yellow-400"></span>
                 </p>
                 {imageURL &&
                     imageURL.map((image) => (
