@@ -12,6 +12,7 @@ import { userState } from "@/recoil/atom";
 import Cookies from "js-cookie"; // Cookies
 import axios from "axios";
 import { BACKEND_URL } from "@/lib/config";
+import TweetModal from "./modals/tweetModal";
 
 const Sidebar = () => {
     const [user, setUser] = useRecoilState(userState);
@@ -72,7 +73,8 @@ const Sidebar = () => {
                     )}
                     {!user && <LoginModal />}
                     {!user && <SignupModal />}
-                    <SidebarTweetButton />
+                    {/* <SidebarTweetButton /> */}
+                    <TweetModal />
                 </div>
             </div>
         </div>
