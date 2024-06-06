@@ -32,3 +32,11 @@ export interface People {
     profileImage?: string;
     following: boolean;
 }
+
+export interface ProfileTweet {
+    id: number;
+    content: string;
+    likeCount: number;
+    createdAt: string;
+    imageURL?: string[];
+}

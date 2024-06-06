@@ -2,22 +2,25 @@
 import Header from "@/components/header";
 import { Loader } from "@/components/loader";
 import { BACKEND_URL } from "@/lib/config";
-import { UserWithDetails } from "@/lib/types";
+import { ProfileTweet, UserWithDetails } from "@/lib/types";
 import axios from "axios";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import TweetCard from "@/components/tweetCard";
+import TweetDivider from "@/components/tweetDivider";
 
 const Profile = ({ params }: { params: { username: string } }) => {
     const [isFetched, setIsFetched] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [profile, setProfile] = useState<UserWithDetails | null>(null);
+    const [profileTweets, setProfileTweets] = useState<ProfileTweet[]>([]);
 
     useEffect(() => {
         if (isFetched) return;
         setIsLoading(true);
         try {
-            const fetchData = async () => {
+            const fetchProfileData = async () => {
                 const response = await axios.get(`${BACKEND_URL}/profile`, {
                     headers: {
                         authorization: Cookies.get("token"),
@@ -32,12 +35,40 @@ const Profile = ({ params }: { params: { username: string } }) => {
                     setIsLoading(false);
                 }
             };
-            fetchData();
+            fetchProfileData();
         } catch (error) {
             console.log(error);
             setIsFetched(false);
         }
     }, [isFetched, params.username]);
+
+    useEffect(() => {
+        if (!profile?.username) return;
+        const fetchProfileTweets = async () => {
+            const response = await axios.post(
+                `${BACKEND_URL}/fetch-profile-tweet`,
+                {
+                    skip: 0,
+                    username: profile.username,
+                }
+            );
+            if (response.data) {
+                let temp: ProfileTweet[] = [];
+                response.data?.tweets.map((tweet: any) => {
+                    const nTweet: ProfileTweet = {
+                        id: Number(tweet.id),
+                        content: tweet.content,
+                        imageURL: tweet.imageURL,
+                        likeCount: tweet.like.count,
+                        createdAt: tweet.createdAt,
+                    };
+                    temp.push(nTweet);
+                });
+                setProfileTweets(temp);
+            }
+        };
+        fetchProfileTweets();
+    }, [profile?.username, profile]);
 
     if (isLoading) {
         return (
@@ -50,7 +81,7 @@ const Profile = ({ params }: { params: { username: string } }) => {
     return (
         <div>
             <Header label={`${profile?.name} (@${profile?.username})`} />
-            <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg ">
+            <div className="bg-white dark:bg-gray-800 shadow-lg  ">
                 <div className="relative">
                     <Image
                         src={
@@ -108,17 +139,28 @@ const Profile = ({ params }: { params: { username: string } }) => {
                 <h2 className=" p-2 text-xl font-bold mb-4 text-gray-900 dark:text-white">
                     Tweets
                 </h2>
-                <div className="space-y-4">
-                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <p className="text-gray-700 dark:text-gray-300">
-                            This is a tweet.
-                        </p>
-                    </div>
-                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                        <p className="text-gray-700 dark:text-gray-300">
-                            This is another tweet.
-                        </p>
-                    </div>
+                <TweetDivider />
+                <div className="">
+                    {profileTweets.map((tweet) => (
+                        <div
+                            className=""
+                            key={tweet.id}
+                        >
+                            {" "}
+                            <TweetCard
+                                key={tweet.id}
+                                tweetId={tweet.id}
+                                content={tweet.content}
+                                authorName={profile?.name || ""}
+                                authorUsername={profile?.username || ""}
+                                authorImage={profile?.imageURL || ""}
+                                isLiked={false}
+                                likeCount={tweet.likeCount}
+                                imageURL={tweet.imageURL}
+                            />
+                            <TweetDivider className="ml-2 mr-2" />
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
