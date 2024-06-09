@@ -10,6 +10,7 @@ import { useRecoilState } from "recoil";
 import { tweetState, userState } from "@/recoil/atom";
 import { Loader } from "./loader";
 import { TweetWithDetails } from "@/lib/types";
+import FileUploadModal from "./modals/fileUploadModal";
 
 const TweetInput = () => {
     const [isDisabled, setIsDisabled] = useState(true);
@@ -89,11 +90,15 @@ const TweetInput = () => {
                     }}
                 />
                 {!isLoading && (
-                    <Button
-                        label="Tweet"
-                        onClick={handleTweetSubmit}
-                        disabled={isDisabled}
-                    />
+                    <>
+                        {" "}
+                        <FileUploadModal />
+                        <Button
+                            label="Tweet"
+                            onClick={handleTweetSubmit}
+                            disabled={isDisabled}
+                        />
+                    </>
                 )}
                 {isLoading && <Loader />}
             </div>
