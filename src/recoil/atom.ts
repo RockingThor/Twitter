@@ -15,3 +15,8 @@ export const tweetCount = atom<number>({
     key: "tweetCount",
     default: 0,
 });
+
+export const videoURLState = atom<string>({
+    key: "videoURLState",
+    default: "",
+});

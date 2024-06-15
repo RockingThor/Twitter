@@ -49,6 +49,7 @@ export default function Home() {
                             likeCount: tweet.like.count,
                             isLiked: false,
                             imageURL: [],
+                            video: tweet.video,
                         };
                         temp.push(newTweet);
                     });
@@ -100,6 +101,7 @@ export default function Home() {
                             likeCount={tweet.likeCount}
                             isLiked={tweet.isLiked}
                             imageURL={tweet.imageURL}
+                            video={tweet.video}
                         />
                     </div>
                 ))}

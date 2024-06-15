@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useRecoilState } from "recoil";
-import { tweetState, userState } from "@/recoil/atom";
+import { tweetState, userState, videoURLState } from "@/recoil/atom";
 import { Loader } from "./loader";
 import { TweetWithDetails } from "@/lib/types";
 import FileUploadModal from "./modals/fileUploadModal";
@@ -18,6 +18,7 @@ const TweetInput = () => {
     const [user, setUser] = useRecoilState(userState);
     const [isLoading, setIsLoading] = useState(false);
     const [tweets, setTweets] = useRecoilState(tweetState);
+    const [videoURL, setVideoURL] = useRecoilState(videoURLState);
 
     useEffect(() => {
         if (content.length > 0) {
@@ -34,6 +35,7 @@ const TweetInput = () => {
                 `${BACKEND_URL}/tweet`,
                 {
                     content,
+                    videoURL,
                 },
                 {
                     headers: {
@@ -41,6 +43,7 @@ const TweetInput = () => {
                     },
                 }
             );
+            setVideoURL("");
             if (res.data) {
                 toast.success("Tweet done!!😁");
                 const temp: TweetWithDetails[] = [];
@@ -53,6 +56,7 @@ const TweetInput = () => {
                     likeCount: 0,
                     isLiked: false,
                     imageURL: [],
+                    video: res.data.video,
                 };
                 temp.push(newTweet);
                 tweets?.map((tweet: TweetWithDetails) => {

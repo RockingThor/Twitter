@@ -24,6 +24,7 @@ export interface TweetWithDetails extends Tweet {
     likeCount: number;
     isLiked?: boolean;
     imageURL?: string[];
+    video?: boolean;
 }
 
 export interface People {

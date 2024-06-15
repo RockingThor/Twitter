@@ -10,21 +10,22 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import Button from "../button";
-import { UploadIcon } from "lucide-react";
 import axios from "axios";
-import { BACKEND_URL } from "@/lib/config";
+import { AWS_S3_URL, BACKEND_URL } from "@/lib/config";
 import { Loader } from "../loader";
 import Cookies from "js-cookie";
+import { useRecoilState } from "recoil";
+import { videoURLState } from "@/recoil/atom";
 
 const FileUploadModal = () => {
     const [disabled, setDisabled] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [videoURL, setVideoURL] = useRecoilState(videoURLState);
     const onFileSelect = async (e: any) => {
         setDisabled(true);
         setLoading(true);
         try {
             const file = e.target.files[0];
-            console.log(file);
             const response = await axios.get(
                 `${BACKEND_URL}/cloud/presigned-url`,
                 {
@@ -64,8 +65,9 @@ const FileUploadModal = () => {
             const awsResponse = await axios.post(presignedUrl, formData);
             if (awsResponse) {
                 console.log(awsResponse);
-                console;
                 // const fileURL = `${CLOUDFRONT_URL}/${response.data.fields["key"]}`;
+                const vURL = `${AWS_S3_URL}/${response.data.fields["key"]}`;
+                setVideoURL(vURL);
                 // let tempImages: ImagesData[] = [];
                 // uploadedImages.forEach((image) => {
                 //     tempImages.push(image);

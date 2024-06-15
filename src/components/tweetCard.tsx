@@ -6,8 +6,9 @@ import { CiHeart } from "react-icons/ci";
 import { FaHeartCircleBolt } from "react-icons/fa6";
 import { FaRetweet } from "react-icons/fa6";
 import axios from "axios";
-import { BACKEND_URL } from "@/lib/config";
+import { BACKEND_URL, CLOUDFRONT_URL } from "@/lib/config";
 import Cookies from "js-cookie";
+import VideoPlayer from "./video";
 
 interface TweetCardProps {
     tweetId: number;
@@ -18,6 +19,7 @@ interface TweetCardProps {
     imageURL?: string[];
     isLiked?: boolean;
     likeCount: number;
+    video?: boolean;
 }
 
 const TweetCard = ({
@@ -29,6 +31,7 @@ const TweetCard = ({
     imageURL,
     isLiked,
     likeCount,
+    video,
 }: TweetCardProps) => {
     const [totalLikeCount, setTotalLikeCount] = useState(likeCount);
     const [isLikedByUser, setIsLikedByUser] = useState(isLiked);
@@ -85,6 +88,13 @@ const TweetCard = ({
                             className="mt-4 rounded-lg"
                         />
                     ))}
+                {video && (
+                    <div className="rounded-sm border-blue-300">
+                        <VideoPlayer
+                            src={`${CLOUDFRONT_URL}/tweetId/${tweetId}/index.m3u8`}
+                        />
+                    </div>
+                )}
                 <div className="flex justify-around mt-4 text-gray-500">
                     <div
                         className="flex items-center space-x-2 cursor-pointer"
