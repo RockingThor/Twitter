@@ -11,6 +11,7 @@ import TweetCard from "@/components/tweetCard";
 import TweetDivider from "@/components/tweetDivider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProfileTweets from "@/components/profileTweets";
+import ProfileMe from "@/components/profile";
 
 const Profile = ({ params }: { params: { username: string } }) => {
     const [isFetched, setIsFetched] = useState(false);
@@ -84,60 +85,23 @@ const Profile = ({ params }: { params: { username: string } }) => {
         <div>
             <Header label={`${profile?.name} (@${profile?.username})`} />
             <div className="bg-white dark:bg-gray-800 shadow-lg  ">
-                <div className="relative">
-                    <Image
-                        src={
-                            profile?.backgroundImageURL ||
-                            "https://d2lff49aaqvgse.cloudfront.net/twitter/static/1500x500.jpeg"
-                        }
-                        height={100}
-                        width={100}
-                        alt="Profile banner"
-                        className="w-full h-56 object-cover rounded-t-lg"
-                    />
-                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
-                        <Image
-                            src={
-                                profile?.imageURL ||
-                                "https://d2lff49aaqvgse.cloudfront.net/twitter/static/354384-200.png"
-                            }
-                            alt="Profile"
-                            height={100}
-                            width={100}
-                            className="w-32 h-32 object-cover rounded-full border-4 border-white dark:border-gray-800"
+                <div className="">
+                    {profile && (
+                        <ProfileMe
+                            bio={profile.bio}
+                            name={profile.name}
+                            username={profile.username}
+                            followerCount={profile.followerCount}
+                            followingCount={profile.followingCount}
+                            imageURL={profile.imageURL}
+                            backgroundImageURL={profile.backgroundImageURL}
+                            tweets={profile.tweets}
                         />
-                    </div>
-                </div>
-                <div className="p-6 mt-10">
-                    <div className="text-center">
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                            {profile?.name}
-                        </h1>
-                        <p className="text-gray-500 dark:text-gray-400">
-                            {profile?.username}
-                        </p>
-                    </div>
-                    <div className="mt-4 flex justify-center space-x-4 text-gray-500 dark:text-gray-400">
-                        <div>
-                            <span className="font-bold text-gray-900 dark:text-white">
-                                {profile?.followingCount}
-                            </span>{" "}
-                            Following
-                        </div>
-                        <div>
-                            <span className="font-bold text-gray-900 dark:text-white">
-                                {profile?.followerCount}
-                            </span>{" "}
-                            Followers
-                        </div>
-                    </div>
-                    <p className="mt-4 text-center text-gray-700 dark:text-gray-300">
-                        {profile?.bio || "Welcome to my twitter profile."}
-                    </p>
+                    )}
                 </div>
             </div>
 
-            <div className="mt-2">
+            <div className="mt-1">
                 <Tabs
                     defaultValue="account"
                     className="w-100"
