@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { FilePenIcon, LinkIcon, LocateIcon } from "./icons/icon";
 import { UserWithDetails } from "@/lib/types";
+import ProfileEditModal from "./modals/profileEditModal";
 
 const ProfileMe = ({
     imageURL,
@@ -30,14 +31,7 @@ const ProfileMe = ({
                                 <AvatarFallback>{username}</AvatarFallback>
                             </Avatar>
                         </div>
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            className="absolute top-4 right-4 rounded-full"
-                        >
-                            <FilePenIcon className="w-5 h-5" />
-                            <span className="sr-only">Edit Profile</span>
-                        </Button>
+                        <ProfileEditModal />
                     </div>
                     <div className="pt-20 px-6 pb-6 space-y-4">
                         <div className="flex items-center justify-between">
