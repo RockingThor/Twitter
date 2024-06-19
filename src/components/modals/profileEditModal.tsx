@@ -138,14 +138,7 @@ const ProfileEditModal = () => {
                                     </AvatarFallback>
                                 )}
                             </Avatar>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="absolute top-0 right-0 -translate-x-1/2 -translate-y-1/2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
-                                onClick={handleOpenImagePicker}
-                            >
-                                <CameraIcon className="w-5 h-5" />
-                            </Button>
+
                             {isImagePickerOpen && (
                                 <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white dark:bg-gray-800 rounded-md shadow-lg p-4 w-64">
                                     <Input

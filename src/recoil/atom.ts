@@ -20,3 +20,8 @@ export const videoURLState = atom<string>({
     key: "videoURLState",
     default: "",
 });
+
+export const profileImageURLState = atom<string>({
+    key: "profileImageURLState",
+    default: "",
+});

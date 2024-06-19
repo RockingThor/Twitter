@@ -34,9 +34,11 @@ export async function getPresignedURL(authorization: string) {
             "X-Amz-Algorithm",
             response.data.fields["X-Amz-Algorithm"]
         );
+        const key = response.data.fields["key"];
         return {
             presignedUrl,
             formData,
+            key,
         };
     } catch (error) {
         console.log(error);
